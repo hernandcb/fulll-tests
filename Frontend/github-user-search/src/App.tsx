@@ -2,34 +2,47 @@ import { useState, type ChangeEvent } from 'react';
 import githubService from './services/github';
 import './App.css';
 
+interface User {
+  id: number;
+  login: string;
+  avatar_url: string;
+  url: string;
+}
+
 function App() {
-  const [userQuery, setUserQuery] = useState('');
-  const [users, setUsers] = useState([]);
-  const [apiLimitExceded, setApiLimitExceded] = useState(false);
+  const [userQuery, setUserQuery] = useState<string>('');
+  const [users, setUsers] = useState<User[]>([]);
+  const [apiLimitExceded, setApiLimitExceded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleQueryChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newQueryValue = event.target.value;
     setUserQuery(newQueryValue);
+    setApiLimitExceded(false);
+    setLoading(true);
+    setUsers([]);
 
     if (newQueryValue === '') {
-      setUsers([]);
-      setApiLimitExceded(false);
+      setLoading(false);
       return;
     }
 
     try {
-      const usersReturned = await githubService.userSearch(newQueryValue);
+      const usersReturned: User[] =
+        await githubService.userSearch(newQueryValue);
+
       setUsers(usersReturned);
-      setApiLimitExceded(false);
     } catch (error) {
       console.log('Github api limit exceded ', error);
       setApiLimitExceded(true);
-      setUsers([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const noUserQuery = !apiLimitExceded && userQuery === '';
-  const noResults = !apiLimitExceded && userQuery !== '' && users.length === 0;
+  const noUserQuery = !loading && !apiLimitExceded && userQuery === '';
+  const noResults =
+    !loading && !apiLimitExceded && userQuery !== '' && users.length === 0;
 
   return (
     <>
@@ -47,7 +60,8 @@ function App() {
         <section id="results">
           {noUserQuery && <div>Start typing to search</div>}
           {noResults && <div>There were no users found by '{userQuery}'</div>}
-          {apiLimitExceded && (
+          {loading && <div>Loading...</div>}
+          {!loading && apiLimitExceded && (
             <div>
               Github API Limit exceded, wait some seconds before trying again.
             </div>
