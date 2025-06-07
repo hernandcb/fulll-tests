@@ -1,29 +1,35 @@
 import { useState, type ChangeEvent } from 'react';
+import githubService from './services/github';
 import './App.css';
 
 function App() {
   const [userQuery, setUserQuery] = useState('');
   const [users, setUsers] = useState([]);
+  const [apiLimitExceded, setApiLimitExceded] = useState(false);
 
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newQueryValue = event.target.value;
     setUserQuery(newQueryValue);
 
     if (newQueryValue === '') {
       setUsers([]);
+      setApiLimitExceded(false);
       return;
     }
 
-    const params = new URLSearchParams();
-    params.append('q', newQueryValue);
-
-    fetch(`https://api.github.com/search/users?${params}`)
-      .then((response) => response.json())
-      .then((data) => setUsers(data.items));
+    try {
+      const usersReturned = await githubService.userSearch(newQueryValue);
+      setUsers(usersReturned);
+      setApiLimitExceded(false);
+    } catch (error) {
+      console.log('Github api limit exceded ', error);
+      setApiLimitExceded(true);
+      setUsers([]);
+    }
   };
 
-  const noUserQuery = userQuery === '';
-  const noResults = userQuery !== '' && users.length === 0;
+  const noUserQuery = !apiLimitExceded && userQuery === '';
+  const noResults = !apiLimitExceded && userQuery !== '' && users.length === 0;
 
   return (
     <>
@@ -41,6 +47,11 @@ function App() {
         <section id="results">
           {noUserQuery && <div>Start typing to search</div>}
           {noResults && <div>There were no users found by '{userQuery}'</div>}
+          {apiLimitExceded && (
+            <div>
+              Github API Limit exceded, wait some seconds before trying again.
+            </div>
+          )}
           {users.map((user) => (
             <article key={user.id} className="card-user">
               {user.login}
