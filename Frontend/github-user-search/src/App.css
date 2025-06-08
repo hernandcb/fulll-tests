@@ -16,10 +16,10 @@ header {
   justify-content: space-evenly;
   padding: 15px;
   flex-wrap: wrap;
+  gap: 15px;
 }
 
 .card-user {
-  border: 1px solid black;
   max-width: 100px;
   min-width: 100px;
   padding: 8px 2px;
