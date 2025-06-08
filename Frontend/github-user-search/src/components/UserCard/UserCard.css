@@ -1,0 +1,51 @@
+.user-card {
+  max-width: 100px;
+  min-width: 100px;
+  padding: 8px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #d5d5d5;
+  padding: 15px 0;
+  font-size: 12px;
+  border-radius: 10%;
+  border-style: outset;
+}
+
+.user-card .avatar {
+  width: 40px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.user-card .user-id {
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.user-card .username {
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px;
+}
+
+.user-card .view-profile {
+  margin-top: 10px;
+}
+
+.user-card .view-profile .link {
+  text-decoration: none;
+  color: #000;
+}
+
+.user-card .view-profile .button {
+  background-color: #32a3fb;
+  border-radius: 10%;
+  padding: 5px 10px;
+}
+
+.user-card .view-profile .button:hover {
+  background-color: #1e7bbf;
+  color: #fff;
+}

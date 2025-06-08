@@ -1,13 +1,8 @@
 import { useState, type ChangeEvent } from 'react';
 import githubService from './services/github';
+import type { User } from './types/User';
 import './App.css';
-
-interface User {
-  id: number;
-  login: string;
-  avatar_url: string;
-  url: string;
-}
+import { UserCard } from './components/UserCard';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
@@ -67,62 +62,7 @@ function App() {
             </div>
           )}
           {users.map((user) => (
-            <article
-              key={user.id}
-              className="card-user"
-              style={{
-                textAlign: 'center',
-                padding: '15px 0',
-                fontSize: '12px',
-                backgroundColor: '#d5d5d5',
-                borderRadius: '10px',
-                borderStyle: 'outset',
-              }}
-            >
-              <img
-                src={user.avatar_url}
-                alt={`Avatar of ${user.login}`}
-                className="avatar"
-                width={40}
-                height={40}
-                style={{ borderRadius: '50%' }}
-              />
-              <div className="user-id" style={{ margin: '5px 0' }}>
-                {user.id}
-              </div>
-              <div
-                className="user-login"
-                style={{
-                  margin: '5px 0',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  padding: '0 7px',
-                }}
-                title={user.login}
-              >
-                {user.login}
-              </div>
-              <div>
-                <a
-                  href={`https://github.com/${user.login}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: 'none', color: 'black' }}
-                >
-                  <span
-                    style={{
-                      // border: '1px solid blue',
-                      padding: '2px 5px',
-                      backgroundColor: '#32a3fb',
-                      borderRadius: '10%',
-                    }}
-                  >
-                    View profile
-                  </span>
-                </a>
-              </div>
-            </article>
+            <UserCard key={user.id} user={user} />
           ))}
         </section>
       </main>
