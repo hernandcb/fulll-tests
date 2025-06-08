@@ -1,13 +1,8 @@
 import { useState, type ChangeEvent } from 'react';
 import githubService from './services/github';
+import type { User } from './types/User';
 import './App.css';
-
-interface User {
-  id: number;
-  login: string;
-  avatar_url: string;
-  url: string;
-}
+import { UserCard } from './components/UserCard';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
@@ -45,35 +40,31 @@ function App() {
     !loading && !apiLimitExceded && userQuery !== '' && users.length === 0;
 
   return (
-    <>
+    <div id="app">
       <header>Github search</header>
-      <main>
-        <section id="search">
-          <input
-            type="text"
-            placeholder="Search input"
-            onChange={handleQueryChange}
-            value={userQuery}
-          />
-        </section>
+      <section id="search">
+        <input
+          type="text"
+          placeholder="Search input"
+          onChange={handleQueryChange}
+          value={userQuery}
+        />
+      </section>
 
-        <section id="results">
-          {noUserQuery && <div>Start typing to search</div>}
-          {noResults && <div>There were no users found by '{userQuery}'</div>}
-          {loading && <div>Loading...</div>}
-          {!loading && apiLimitExceded && (
-            <div>
-              Github API Limit exceded, wait some seconds before trying again.
-            </div>
-          )}
-          {users.map((user) => (
-            <article key={user.id} className="card-user">
-              {user.login}
-            </article>
-          ))}
-        </section>
-      </main>
-    </>
+      <section id="results">
+        {noUserQuery && <div>Start typing to search</div>}
+        {noResults && <div>There were no users found by '{userQuery}'</div>}
+        {loading && <div>Loading...</div>}
+        {!loading && apiLimitExceded && (
+          <div>
+            Github API Limit exceded, wait some seconds before trying again.
+          </div>
+        )}
+        {users.map((user) => (
+          <UserCard key={user.id} user={user} />
+        ))}
+      </section>
+    </div>
   );
 }
 
