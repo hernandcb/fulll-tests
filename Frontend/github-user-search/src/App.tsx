@@ -40,33 +40,31 @@ function App() {
     !loading && !apiLimitExceded && userQuery !== '' && users.length === 0;
 
   return (
-    <>
+    <div id="app">
       <header>Github search</header>
-      <main>
-        <section id="search">
-          <input
-            type="text"
-            placeholder="Search input"
-            onChange={handleQueryChange}
-            value={userQuery}
-          />
-        </section>
+      <section id="search">
+        <input
+          type="text"
+          placeholder="Search input"
+          onChange={handleQueryChange}
+          value={userQuery}
+        />
+      </section>
 
-        <section id="results">
-          {noUserQuery && <div>Start typing to search</div>}
-          {noResults && <div>There were no users found by '{userQuery}'</div>}
-          {loading && <div>Loading...</div>}
-          {!loading && apiLimitExceded && (
-            <div>
-              Github API Limit exceded, wait some seconds before trying again.
-            </div>
-          )}
-          {users.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </section>
-      </main>
-    </>
+      <section id="results">
+        {noUserQuery && <div>Start typing to search</div>}
+        {noResults && <div>There were no users found by '{userQuery}'</div>}
+        {loading && <div>Loading...</div>}
+        {!loading && apiLimitExceded && (
+          <div>
+            Github API Limit exceded, wait some seconds before trying again.
+          </div>
+        )}
+        {users.map((user) => (
+          <UserCard key={user.id} user={user} />
+        ))}
+      </section>
+    </div>
   );
 }
 
