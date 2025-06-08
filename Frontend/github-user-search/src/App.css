@@ -1,0 +1,27 @@
+header {
+  background-color: gray;
+  font-weight: bold;
+  height: 64px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#search {
+  padding: 25px;
+  text-align: center;
+}
+
+#results {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 15px;
+  flex-wrap: wrap;
+}
+
+.card-user {
+  border: 1px solid black;
+  max-width: 100px;
+  min-width: 100px;
+  padding: 8px 2px;
+  box-sizing: border-box;
+}
