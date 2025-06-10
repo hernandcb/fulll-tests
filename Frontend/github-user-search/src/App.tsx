@@ -3,6 +3,7 @@ import { UserCard } from './components/UserCard';
 import { useDebounce } from './hooks/useDebounce';
 import { useGithubSearch } from './hooks/useGithubSearch';
 import './App.css';
+import { StateMessage } from './components/StateMessage';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
@@ -15,21 +16,6 @@ function App() {
     debouncedSendQuery(newQueryValue);
   };
 
-  const getStateMessage = () => {
-    if (loading) return <div>Loading...</div>;
-
-    if (apiLimitExceeded)
-      return <div>GitHub API limit exceeded. Try again later.</div>;
-
-    if (userQuery === '') return <div>Start typing to search</div>;
-
-    if (userQuery !== '' && users.length === 0)
-      return <div>No users found for '{userQuery}'</div>;
-
-    return null;
-  };
-
-  const stateMessage = getStateMessage();
   return (
     <div className="app">
       <header>Github search</header>
@@ -43,7 +29,12 @@ function App() {
       </section>
 
       <section className="results">
-        <div className="state-message">{stateMessage}</div>
+        <StateMessage
+          loading={loading}
+          apiLimitExceeded={apiLimitExceeded}
+          userQuery={userQuery}
+          usersLength={users.length}
+        />
 
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
