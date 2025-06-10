@@ -1,48 +1,39 @@
 import { useState, type ChangeEvent } from 'react';
-import githubService from './services/github';
-import type { User } from './types/User';
-import './App.css';
 import { UserCard } from './components/UserCard';
+import { useDebounce } from './hooks/useDebounce';
+import { useGithubSearch } from './hooks/useGithubSearch';
+import './App.css';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]);
-  const [apiLimitExceded, setApiLimitExceded] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { users, loading, apiLimitExceeded, searchUsers } = useGithubSearch();
+  const debouncedSendQuery = useDebounce(searchUsers, 500);
 
   const handleQueryChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newQueryValue = event.target.value;
     setUserQuery(newQueryValue);
-    setApiLimitExceded(false);
-    setLoading(true);
-    setUsers([]);
-
-    if (newQueryValue === '') {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const usersReturned: User[] =
-        await githubService.userSearch(newQueryValue);
-
-      setUsers(usersReturned);
-    } catch (error) {
-      console.log('Github api limit exceded ', error);
-      setApiLimitExceded(true);
-    } finally {
-      setLoading(false);
-    }
+    debouncedSendQuery(newQueryValue);
   };
 
-  const noUserQuery = !loading && !apiLimitExceded && userQuery === '';
-  const noResults =
-    !loading && !apiLimitExceded && userQuery !== '' && users.length === 0;
+  const getStateMessage = () => {
+    if (loading) return <div>Loading...</div>;
 
+    if (apiLimitExceeded)
+      return <div>GitHub API limit exceeded. Try again later.</div>;
+
+    if (userQuery === '') return <div>Start typing to search</div>;
+
+    if (userQuery !== '' && users.length === 0)
+      return <div>No users found for '{userQuery}'</div>;
+
+    return null;
+  };
+
+  const stateMessage = getStateMessage();
   return (
-    <div id="app">
+    <div className="app">
       <header>Github search</header>
-      <section id="search">
+      <section className="search">
         <input
           type="text"
           placeholder="Search input"
@@ -51,15 +42,9 @@ function App() {
         />
       </section>
 
-      <section id="results">
-        {noUserQuery && <div>Start typing to search</div>}
-        {noResults && <div>There were no users found by '{userQuery}'</div>}
-        {loading && <div>Loading...</div>}
-        {!loading && apiLimitExceded && (
-          <div>
-            Github API Limit exceded, wait some seconds before trying again.
-          </div>
-        )}
+      <section className="results">
+        <div className="state-message">{stateMessage}</div>
+
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}

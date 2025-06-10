@@ -1,4 +1,4 @@
-#app {
+.app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -18,7 +18,7 @@ header {
   width: 100%;
 }
 
-#search {
+.search {
   height: 100px;
   min-height: 100px;
   padding: 25px;
@@ -27,7 +27,7 @@ header {
   box-sizing: border-box;
 }
 
-#search input {
+.search input {
   padding: 15px;
   width: 300px;
   font-size: 16px;
@@ -35,12 +35,12 @@ header {
   border-radius: 15px;
 }
 
-#search input:focus {
+.search input:focus {
   outline: none;
   border-color: #007bff;
 }
 
-#results {
+.results {
   flex: 1;
   overflow: auto;
   display: flex;
@@ -49,4 +49,11 @@ header {
   flex-wrap: wrap;
   align-content: flex-start;
   justify-content: flex-start;
+}
+
+.results .state-message {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  color: #666;
 }
