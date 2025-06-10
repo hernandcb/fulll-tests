@@ -5,6 +5,7 @@ import { useGithubSearch } from './hooks/useGithubSearch';
 import './App.css';
 import { StateMessage } from './components/StateMessage';
 import type { User } from './types/User';
+import { SelectionActions } from './components/SelectionActions/SelectionActions';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
@@ -38,7 +39,7 @@ function App() {
     }));
   };
 
-  const handleSelectAllChange = () => {
+  const toogleSelectAll = () => {
     const newSelectionState = !allSelected;
     setAllSelected(newSelectionState);
     setSelectedUserIDs(
@@ -49,7 +50,7 @@ function App() {
     );
   };
 
-  const numberOfCardsSelected = Object.values(selectedUserIDs).reduce(
+  const selectedCount = Object.values(selectedUserIDs).reduce(
     (count, isSelected) => count + (isSelected ? 1 : 0),
     0,
   );
@@ -87,24 +88,13 @@ function App() {
       </section>
 
       {users.length > 0 && (
-        <section className="actions">
-          <div className="selected-count">
-            <input
-              type="checkbox"
-              checked={allSelected}
-              onChange={handleSelectAllChange}
-            />
-            {numberOfCardsSelected > 0
-              ? `Selected ${numberOfCardsSelected} user${numberOfCardsSelected > 1 ? 's' : ''}`
-              : 'No users selected'}
-          </div>
-          {numberOfCardsSelected > 0 && (
-            <div className="options">
-              <button onClick={handleDuplicateSelected}>Duplicate</button>
-              <button onClick={handleDeleteSelected}>Delete</button>
-            </div>
-          )}
-        </section>
+        <SelectionActions
+          selectedCount={selectedCount}
+          allSelected={allSelected}
+          onToogleSelectAll={toogleSelectAll}
+          onDelete={handleDeleteSelected}
+          onDuplicate={handleDuplicateSelected}
+        />
       )}
 
       <section className="results">
