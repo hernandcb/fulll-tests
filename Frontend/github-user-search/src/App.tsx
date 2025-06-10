@@ -4,15 +4,20 @@ import { useDebounce } from './hooks/useDebounce';
 import { useGithubSearch } from './hooks/useGithubSearch';
 import './App.css';
 import { StateMessage } from './components/StateMessage';
+import type { User } from './types/User';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
-  const { users, loading, apiLimitExceeded, searchUsers } = useGithubSearch();
+  const { loading, apiLimitExceeded, searchUsers } = useGithubSearch();
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUserIDs, setSelectedUserIDs] = useState<
     Record<number, boolean>
   >({});
   const [allSelected, setAllSelected] = useState<boolean>(false);
-  const debouncedSendQuery = useDebounce(searchUsers, 500);
+  const debouncedSendQuery = useDebounce(async (query: string) => {
+    const returnedUsers = await searchUsers(query);
+    setUsers(returnedUsers);
+  }, 500);
 
   useEffect(() => {
     // Reset selected users when the user query changes
@@ -49,7 +54,26 @@ function App() {
     0,
   );
 
-  console.log('Number of cards selected:', numberOfCardsSelected);
+  const handleDeleteSelected = () => {
+    setUsers((prevUsers) =>
+      prevUsers.filter((user) => !selectedUserIDs[user.id]),
+    );
+    setSelectedUserIDs({});
+    setAllSelected(false);
+  };
+
+  const handleDuplicateSelected = () => {
+    const selectedUsers = users.filter((user) => selectedUserIDs[user.id]);
+    const duplicatedUsers = selectedUsers.map((user) => ({
+      ...user,
+      login: `${user.login}-copy`, // Modify the login to avoid conflicts
+      id: user.id + Math.random(), // Generate a new unique ID
+    }));
+    setUsers((prevUsers) => [...prevUsers, ...duplicatedUsers]);
+    setSelectedUserIDs({});
+    setAllSelected(false);
+  };
+
   return (
     <div className="app">
       <header>Github search</header>
@@ -74,7 +98,12 @@ function App() {
               ? `Selected ${numberOfCardsSelected} user${numberOfCardsSelected > 1 ? 's' : ''}`
               : 'No users selected'}
           </div>
-          <div className="options"></div>
+          {numberOfCardsSelected > 0 && (
+            <div className="options">
+              <button onClick={handleDuplicateSelected}>Duplicate</button>
+              <button onClick={handleDeleteSelected}>Delete</button>
+            </div>
+          )}
         </section>
       )}
 
