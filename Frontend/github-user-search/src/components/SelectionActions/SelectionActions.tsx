@@ -1,3 +1,7 @@
+import './SelectionActions.css';
+import deleteIcon from './../../assets/delete.svg';
+import duplicateIcon from './../../assets/duplicate.svg';
+
 interface SelectionActionsProps {
   selectedCount: number;
   allSelected: boolean;
@@ -16,7 +20,7 @@ export const SelectionActions = (props: SelectionActionsProps) => {
   } = props;
   return (
     <section className="actions">
-      <div className="selected-count">
+      <div className="selected-items-count">
         <input
           type="checkbox"
           checked={allSelected}
@@ -26,10 +30,28 @@ export const SelectionActions = (props: SelectionActionsProps) => {
           ? `Selected ${selectedCount} user${selectedCount > 1 ? 's' : ''}`
           : 'No users selected'}
       </div>
+
       {selectedCount > 0 && (
-        <div className="options">
-          <button onClick={onDuplicate}>Duplicate</button>
-          <button onClick={onDelete}>Delete</button>
+        <div className="buttons">
+          <button
+            onClick={onDuplicate}
+            aria-label="Delete selected users"
+            title="Delete"
+          >
+            <img src={deleteIcon} width={24} alt="Delete selected users" />
+          </button>
+
+          <button
+            onClick={onDelete}
+            aria-label="Duplicate selected users"
+            title="Duplicate users"
+          >
+            <img
+              src={duplicateIcon}
+              width={24}
+              alt="Duplicate selected users"
+            />
+          </button>
         </div>
       )}
     </section>

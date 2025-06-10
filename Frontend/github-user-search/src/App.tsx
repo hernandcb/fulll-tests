@@ -2,10 +2,10 @@ import { useEffect, useState, type ChangeEvent } from 'react';
 import { UserCard } from './components/UserCard';
 import { useDebounce } from './hooks/useDebounce';
 import { useGithubSearch } from './hooks/useGithubSearch';
-import './App.css';
 import { StateMessage } from './components/StateMessage';
+import { SelectionActions } from './components/SelectionActions';
 import type { User } from './types/User';
-import { SelectionActions } from './components/SelectionActions/SelectionActions';
+import './App.css';
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');

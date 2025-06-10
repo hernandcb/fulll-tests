@@ -1,0 +1,23 @@
+.actions {
+  padding: 10px 25px;
+  color: #666;
+  display: flex;
+}
+
+.actions .selected-items-count {
+  margin-right: 10px;
+}
+
+.actions .buttons {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.actions .buttons button {
+  background-color: transparent;
+  border: none;
+}
+
+.actions .buttons button:hover {
+  cursor: pointer;
+}
