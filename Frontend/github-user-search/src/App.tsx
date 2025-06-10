@@ -1,8 +1,33 @@
-import { useState, type ChangeEvent } from 'react';
+import { useCallback, useMemo, useState, type ChangeEvent } from 'react';
 import githubService from './services/github';
 import type { User } from './types/User';
 import './App.css';
 import { UserCard } from './components/UserCard';
+
+/**
+ * A simple debounce function that delays the execution of a function
+ * until after a specified wait time has elapsed since the last time
+ * it was invoked.
+ *
+ * Types inspired from: https://gist.github.com/ca0v/73a31f57b397606c9813472f7493a940
+ *
+ * @param func - The function to debounce.
+ * @param waitFor - The number of milliseconds to wait before invoking the function.
+ * @returns A debounced version of the provided function.
+ */
+const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+  func: F,
+  waitFor: number,
+) => {
+  let timeout: ReturnType<typeof setTimeout>;
+
+  const debounced = (...args: Parameters<F>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced;
+};
 
 function App() {
   const [userQuery, setUserQuery] = useState<string>('');
@@ -10,29 +35,39 @@ function App() {
   const [apiLimitExceded, setApiLimitExceded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleQueryChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const newQueryValue = event.target.value;
-    setUserQuery(newQueryValue);
+  const getUsersFromGithub = (query: string) => {
     setApiLimitExceded(false);
     setLoading(true);
     setUsers([]);
 
-    if (newQueryValue === '') {
+    if (query === '') {
       setLoading(false);
       return;
     }
 
-    try {
-      const usersReturned: User[] =
-        await githubService.userSearch(newQueryValue);
+    githubService
+      .userSearch(query)
+      .then((usersReturned: User[]) => {
+        setUsers(usersReturned);
+      })
+      .catch((error) => {
+        console.log('Github api limit exceeded ', error);
+        setApiLimitExceded(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-      setUsers(usersReturned);
-    } catch (error) {
-      console.log('Github api limit exceded ', error);
-      setApiLimitExceded(true);
-    } finally {
-      setLoading(false);
-    }
+  const sendQuery = useCallback(getUsersFromGithub, []);
+  const debouncedSendQuery = useMemo(() => {
+    return debounce(sendQuery, 500);
+  }, [sendQuery]);
+
+  const handleQueryChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const newQueryValue = event.target.value;
+    setUserQuery(newQueryValue);
+    debouncedSendQuery(newQueryValue);
   };
 
   const noUserQuery = !loading && !apiLimitExceded && userQuery === '';
