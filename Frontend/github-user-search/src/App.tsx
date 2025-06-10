@@ -15,14 +15,25 @@ function App() {
     debouncedSendQuery(newQueryValue);
   };
 
-  const noUserQuery = !loading && !apiLimitExceeded && userQuery === '';
-  const noResults =
-    !loading && !apiLimitExceeded && userQuery !== '' && users.length === 0;
+  const getStateMessage = () => {
+    if (loading) return <div>Loading...</div>;
 
+    if (apiLimitExceeded)
+      return <div>GitHub API limit exceeded. Try again later.</div>;
+
+    if (userQuery === '') return <div>Start typing to search</div>;
+
+    if (userQuery !== '' && users.length === 0)
+      return <div>No users found for '{userQuery}'</div>;
+
+    return null;
+  };
+
+  const stateMessage = getStateMessage();
   return (
-    <div id="app">
+    <div className="app">
       <header>Github search</header>
-      <section id="search">
+      <section className="search">
         <input
           type="text"
           placeholder="Search input"
@@ -31,15 +42,9 @@ function App() {
         />
       </section>
 
-      <section id="results">
-        {noUserQuery && <div>Start typing to search</div>}
-        {noResults && <div>There were no users found by '{userQuery}'</div>}
-        {loading && <div>Loading...</div>}
-        {!loading && apiLimitExceeded && (
-          <div>
-            Github API Limit exceded, wait some seconds before trying again.
-          </div>
-        )}
+      <section className="results">
+        <div className="state-message">{stateMessage}</div>
+
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}
