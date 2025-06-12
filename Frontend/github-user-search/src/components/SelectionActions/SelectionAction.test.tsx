@@ -9,6 +9,9 @@ describe('SelectionActions component', () => {
       usersLength: 5,
       selectedCount: 0,
       allSelected: false,
+      editMode: true,
+      showEditModeToggle: true,
+      onToggleEditMode: vi.fn(),
       onToggleSelectAll: vi.fn(),
       onDelete: vi.fn(),
       onDuplicate: vi.fn(),
@@ -109,28 +112,41 @@ describe('SelectionActions component', () => {
   });
 
   it('should render the correct number of selected users', () => {
+    const props = setup({ selectedCount: 1, allSelected: false });
     // When 1 user is selected
-    const { rerender } = render(
-      <SelectionActions
-        selectedCount={1}
-        allSelected={false}
-        onToggleSelectAll={vi.fn()}
-        onDelete={vi.fn()}
-        onDuplicate={vi.fn()}
-      />,
-    );
+    const { rerender } = render(<SelectionActions {...props} />);
     expect(screen.getByText('Selected 1 user')).toBeInTheDocument();
 
     // When 4 users are selected
-    rerender(
-      <SelectionActions
-        selectedCount={4}
-        allSelected={false}
-        onToggleSelectAll={vi.fn()}
-        onDelete={vi.fn()}
-        onDuplicate={vi.fn()}
-      />,
-    );
+    props.selectedCount = 4;
+    rerender(<SelectionActions {...props} />);
     expect(screen.getByText('Selected 4 users')).toBeInTheDocument();
+  });
+
+  it('should hide the edit mode toggle when the showToggle prop is false', () => {
+    // Prepare
+    const props = setup({ showEditModeToggle: false });
+
+    // Render
+    const { container } = render(<SelectionActions {...props} />);
+
+    // Assert
+    expect(
+      container.querySelector('.edit-mode-toggle'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should render the edit mode toggle when the prop is true', () => {
+    // Prepare
+    const props = setup({ showEditModeToggle: true });
+
+    // Render
+    const { container } = render(<SelectionActions {...props} />);
+
+    // Assert
+    expect(container.querySelector('.edit-mode-toggle')).toBeInTheDocument();
+    expect(
+      container.querySelector('.actions .selected-items-count'),
+    ).toBeInTheDocument();
   });
 });

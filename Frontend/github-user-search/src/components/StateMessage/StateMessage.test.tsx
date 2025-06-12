@@ -66,7 +66,7 @@ describe('State message component', () => {
 
     // Assert
     expect(
-      screen.getByText(`No users found for '${props.userQuery}'`),
+      screen.getByText(`No results found for '${props.userQuery}'`),
     ).toBeInTheDocument();
   });
 });
