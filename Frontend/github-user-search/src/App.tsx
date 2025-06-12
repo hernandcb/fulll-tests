@@ -107,6 +107,7 @@ function App() {
           onDelete={handleDeleteSelected}
           onDuplicate={handleDuplicateSelected}
           onToggleEditMode={() => setEditMode(!editMode)}
+          showEditModeToggle={users.length > 0}
           editMode={editMode}
         />
       )}

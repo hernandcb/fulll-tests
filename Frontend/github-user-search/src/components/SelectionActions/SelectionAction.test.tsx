@@ -10,6 +10,7 @@ describe('SelectionActions component', () => {
       selectedCount: 0,
       allSelected: false,
       editMode: true,
+      showEditModeToggle: true,
       onToggleEditMode: vi.fn(),
       onToggleSelectAll: vi.fn(),
       onDelete: vi.fn(),
@@ -120,5 +121,32 @@ describe('SelectionActions component', () => {
     props.selectedCount = 4;
     rerender(<SelectionActions {...props} />);
     expect(screen.getByText('Selected 4 users')).toBeInTheDocument();
+  });
+
+  it('should hide the edit mode toggle when the showToggle prop is false', () => {
+    // Prepare
+    const props = setup({ showEditModeToggle: false });
+
+    // Render
+    const { container } = render(<SelectionActions {...props} />);
+
+    // Assert
+    expect(
+      container.querySelector('.edit-mode-toggle'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should render the edit mode toggle when the prop is true', () => {
+    // Prepare
+    const props = setup({ showEditModeToggle: true });
+
+    // Render
+    const { container } = render(<SelectionActions {...props} />);
+
+    // Assert
+    expect(container.querySelector('.edit-mode-toggle')).toBeInTheDocument();
+    expect(
+      container.querySelector('.actions .selected-items-count'),
+    ).toBeInTheDocument();
   });
 });

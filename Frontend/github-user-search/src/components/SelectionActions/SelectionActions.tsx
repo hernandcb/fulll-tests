@@ -5,17 +5,19 @@ import duplicateIcon from './../../assets/duplicate.svg';
 interface SelectionActionsProps {
   selectedCount: number;
   allSelected: boolean;
+  showEditModeToggle: boolean;
+  editMode?: boolean;
   onToggleSelectAll: () => void;
   onToggleEditMode: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
-  editMode?: boolean;
 }
 
 export const SelectionActions = (props: SelectionActionsProps) => {
   const {
     selectedCount,
     allSelected,
+    showEditModeToggle,
     editMode = false,
     onToggleSelectAll,
     onToggleEditMode,
@@ -24,13 +26,17 @@ export const SelectionActions = (props: SelectionActionsProps) => {
   } = props;
   return (
     <section className="selection-actions">
-      {/* {selectedCount > 0 && ( */}
-      <div className="edit-mode-toggle">
-        <input type="checkbox" checked={editMode} onChange={onToggleEditMode} />
-        <label htmlFor="edit-mode-toggle">Edit mode</label>
-        <hr />
-      </div>
-      {/* )} */}
+      {showEditModeToggle && (
+        <div className="edit-mode-toggle">
+          <input
+            type="checkbox"
+            checked={editMode}
+            onChange={onToggleEditMode}
+          />
+          <label htmlFor="edit-mode-toggle">Edit mode</label>
+          <hr />
+        </div>
+      )}
       <div className="actions">
         {editMode && (
           <div className="selected-items-count">
