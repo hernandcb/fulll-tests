@@ -12,8 +12,17 @@ describe('Test UserCard component', () => {
       url: 'github.com/testuser',
     };
 
+    // Mock the toogleSelection function
+    const mockToogleSelection = vi.fn();
+
     // Render the UserCard component
-    render(<UserCard user={mockUser} />);
+    render(
+      <UserCard
+        user={mockUser}
+        selected={false}
+        toogleSelection={mockToogleSelection}
+      />,
+    );
 
     // Check if the data is displayed correctly
 
