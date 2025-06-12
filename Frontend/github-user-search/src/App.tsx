@@ -17,7 +17,7 @@ function App() {
   const [allSelected, setAllSelected] = useState<boolean>(false);
   const debouncedSendQuery = useDebounce(async (query: string) => {
     const returnedUsers = await searchUsers(query);
-    setUsers(returnedUsers);
+    setUsers(returnedUsers ?? []);
   }, 500);
 
   useEffect(() => {

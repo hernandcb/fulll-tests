@@ -13,18 +13,25 @@ export const StateMessage: React.FC<StateMessageProps> = ({
   userQuery,
   usersLength,
 }) => {
-  let message: string | null = null;
-
   if (loading) {
-    message = 'Loading...';
-  } else if (apiLimitExceeded) {
-    message = 'GitHub API limit exceeded. Try again later.';
-  } else if (userQuery === '') {
-    message = 'Start typing to search';
-  }
-  if (userQuery !== '' && usersLength === 0) {
-    message = `No users found for '${userQuery}'`;
+    return <div className="state-message">Loading...</div>;
   }
 
-  return message ? <div className="state-message">{message}</div> : null;
+  if (apiLimitExceeded) {
+    return (
+      <div className="state-message">
+        GitHub API limit exceeded. Try again later.
+      </div>
+    );
+  }
+
+  if (userQuery === '') {
+    return <div className="state-message">Start typing to search</div>;
+  }
+
+  if (userQuery !== '' && usersLength === 0) {
+    return (
+      <div className="state-message">No results found for '{userQuery}'</div>
+    );
+  }
 };
