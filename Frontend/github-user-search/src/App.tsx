@@ -33,10 +33,21 @@ function App() {
   };
 
   const toogleCardSelection = (userId: number) => {
-    setSelectedUserIDs((prevSelected) => ({
-      ...prevSelected,
-      [userId]: !prevSelected[userId],
-    }));
+    const newSelectedUserIDs = {
+      ...selectedUserIDs,
+      [userId]: !selectedUserIDs[userId],
+    };
+
+    // Check if all users are selected
+    const selected = Object.values(newSelectedUserIDs);
+    if (selected.length === users.length) {
+      if (selected.every((isSelected) => isSelected)) {
+        setAllSelected(true);
+      } else if (selected.every((isSelected) => !isSelected)) {
+        setAllSelected(false);
+      }
+    }
+    setSelectedUserIDs(newSelectedUserIDs);
   };
 
   const toogleSelectAll = () => {
@@ -91,7 +102,7 @@ function App() {
         <SelectionActions
           selectedCount={selectedCount}
           allSelected={allSelected}
-          onToogleSelectAll={toogleSelectAll}
+          onToggleSelectAll={toogleSelectAll}
           onDelete={handleDeleteSelected}
           onDuplicate={handleDuplicateSelected}
         />

@@ -5,7 +5,7 @@ import duplicateIcon from './../../assets/duplicate.svg';
 interface SelectionActionsProps {
   selectedCount: number;
   allSelected: boolean;
-  onToogleSelectAll: () => void;
+  onToggleSelectAll: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
 }
@@ -14,7 +14,7 @@ export const SelectionActions = (props: SelectionActionsProps) => {
   const {
     selectedCount,
     allSelected,
-    onToogleSelectAll,
+    onToggleSelectAll,
     onDelete,
     onDuplicate,
   } = props;
@@ -24,7 +24,7 @@ export const SelectionActions = (props: SelectionActionsProps) => {
         <input
           type="checkbox"
           checked={allSelected}
-          onChange={onToogleSelectAll}
+          onChange={onToggleSelectAll}
         />
         {selectedCount > 0
           ? `Selected ${selectedCount} user${selectedCount > 1 ? 's' : ''}`
@@ -34,23 +34,19 @@ export const SelectionActions = (props: SelectionActionsProps) => {
       {selectedCount > 0 && (
         <div className="buttons">
           <button
-            onClick={onDuplicate}
+            onClick={onDelete}
             aria-label="Delete selected users"
-            title="Delete"
+            title="Delete selected users"
           >
-            <img src={deleteIcon} width={24} alt="Delete selected users" />
+            <img src={deleteIcon} width={24} alt="Delete icon" />
           </button>
 
           <button
-            onClick={onDelete}
+            onClick={onDuplicate}
             aria-label="Duplicate selected users"
-            title="Duplicate users"
+            title="Duplicate selected users"
           >
-            <img
-              src={duplicateIcon}
-              width={24}
-              alt="Duplicate selected users"
-            />
+            <img src={duplicateIcon} width={24} alt="Duplicate icon" />
           </button>
         </div>
       )}
