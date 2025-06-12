@@ -5,21 +5,24 @@ type Props = {
   user: User;
   selected: boolean;
   toogleSelection: (userId: number) => void;
+  editMode?: boolean;
 };
 
 export const UserCard = (props: Props) => {
-  const { user, selected = false, toogleSelection } = props;
+  const { user, toogleSelection, selected = false, editMode = false } = props;
   return (
     <article key={user.id} className="user-card">
-      <input
-        type="checkbox"
-        className="checkbox"
-        checked={selected}
-        onChange={() => toogleSelection(user.id)}
-        title="Select user"
-        aria-label={`Select user ${user.login}`}
-        aria-checked={selected ? 'true' : 'false'}
-      />
+      {editMode && (
+        <input
+          type="checkbox"
+          className="checkbox"
+          checked={selected}
+          onChange={() => toogleSelection(user.id)}
+          title="Select user"
+          aria-label={`Select user ${user.login}`}
+          aria-checked={selected ? 'true' : 'false'}
+        />
+      )}
       <img
         src={user.avatar_url}
         alt={`Avatar of ${user.login}`}

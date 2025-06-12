@@ -15,6 +15,7 @@ function App() {
     Record<number, boolean>
   >({});
   const [allSelected, setAllSelected] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const debouncedSendQuery = useDebounce(async (query: string) => {
     const returnedUsers = await searchUsers(query);
     setUsers(returnedUsers ?? []);
@@ -105,6 +106,8 @@ function App() {
           onToggleSelectAll={toogleSelectAll}
           onDelete={handleDeleteSelected}
           onDuplicate={handleDuplicateSelected}
+          onToggleEditMode={() => setEditMode(!editMode)}
+          editMode={editMode}
         />
       )}
 
@@ -122,6 +125,7 @@ function App() {
             user={user}
             selected={selectedUserIDs[user.id]}
             toogleSelection={toogleCardSelection}
+            editMode={editMode}
           />
         ))}
       </section>
