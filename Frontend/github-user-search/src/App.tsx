@@ -53,7 +53,7 @@ function App() {
   };
 
   const toogleSelectAll = () => {
-    const newSelectionState = !allSelected;
+    const newSelectionState: boolean = !allSelected;
     setAllSelected(newSelectionState);
     setSelectedUserIDs(
       users.reduce(
