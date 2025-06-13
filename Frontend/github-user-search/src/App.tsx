@@ -16,6 +16,7 @@ function App() {
   >({});
   const [allSelected, setAllSelected] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [showPopupMessage, setShowPopupMessage] = useState<string | null>(null);
   const debouncedSendQuery = useDebounce(async (query: string) => {
     const returnedUsers = await searchUsers(query);
     setUsers(returnedUsers ?? []);
@@ -68,14 +69,20 @@ function App() {
   );
 
   const handleDeleteSelected = () => {
+    const usersCount = Object.keys(selectedUserIDs).length;
     setUsers((prevUsers) =>
       prevUsers.filter((user) => !selectedUserIDs[user.id]),
     );
     setSelectedUserIDs({});
     setAllSelected(false);
+    setShowPopupMessage(
+      `${usersCount} user${usersCount > 1 ? 's' : ''} deleted `,
+    );
   };
 
   const handleDuplicateSelected = () => {
+    const usersCount = Object.keys(selectedUserIDs).length;
+
     const selectedUsers = users.filter((user) => selectedUserIDs[user.id]);
     const duplicatedUsers = selectedUsers.map((user) => ({
       ...user,
@@ -85,6 +92,9 @@ function App() {
     setUsers((prevUsers) => [...prevUsers, ...duplicatedUsers]);
     setSelectedUserIDs({});
     setAllSelected(false);
+    setShowPopupMessage(
+      `${usersCount} user${usersCount > 1 ? 's' : ''} duplicated`,
+    );
   };
 
   return (
@@ -108,6 +118,8 @@ function App() {
           onDuplicate={handleDuplicateSelected}
           onToggleEditMode={() => setEditMode(!editMode)}
           showEditModeToggle={users.length > 0}
+          popupMessage={showPopupMessage}
+          hidePopupMessage={() => setShowPopupMessage(null)}
           editMode={editMode}
         />
       )}

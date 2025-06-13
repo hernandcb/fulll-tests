@@ -6,11 +6,13 @@ interface SelectionActionsProps {
   selectedCount: number;
   allSelected: boolean;
   showEditModeToggle: boolean;
+  popupMessage: string | null;
   editMode?: boolean;
   onToggleSelectAll: () => void;
   onToggleEditMode: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
+  hidePopupMessage: () => void;
 }
 
 export const SelectionActions = (props: SelectionActionsProps) => {
@@ -18,12 +20,21 @@ export const SelectionActions = (props: SelectionActionsProps) => {
     selectedCount,
     allSelected,
     showEditModeToggle,
+    popupMessage,
     editMode = false,
     onToggleSelectAll,
     onToggleEditMode,
     onDelete,
     onDuplicate,
+    hidePopupMessage,
   } = props;
+
+  if (popupMessage) {
+    setTimeout(() => {
+      console.log('hidding popup');
+      hidePopupMessage();
+    }, 3000);
+  }
   return (
     <section className="selection-actions">
       {showEditModeToggle && (
@@ -56,19 +67,29 @@ export const SelectionActions = (props: SelectionActionsProps) => {
               onClick={onDelete}
               aria-label="Delete selected users"
               title="Delete selected users"
+              className="action-button"
             >
               <img src={deleteIcon} width={24} alt="Delete icon" />
+              <span className="delete-label">Delete</span>
             </button>
 
             <button
               onClick={onDuplicate}
               aria-label="Duplicate selected users"
               title="Duplicate selected users"
+              className="action-button"
             >
               <img src={duplicateIcon} width={24} alt="Duplicate icon" />
+              <span className="duplicate-label">Duplicate</span>
             </button>
           </div>
         )}
+      </div>
+      <div
+        className="popup-message"
+        style={{ display: popupMessage ? 'block' : 'none' }}
+      >
+        {popupMessage}
       </div>
     </section>
   );
