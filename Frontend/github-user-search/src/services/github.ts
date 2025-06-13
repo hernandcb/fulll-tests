@@ -5,7 +5,9 @@ async function userSearch(userQuery: string) {
   params.append('q', userQuery);
 
   try {
-    const response = await fetch(`${baseUrl}/search/users?${params}`);
+    const response = await fetch(
+      `${baseUrl}/search/users?${params}&per_page=100`,
+    );
 
     if (!response.ok) {
       if (response.status === 403) {

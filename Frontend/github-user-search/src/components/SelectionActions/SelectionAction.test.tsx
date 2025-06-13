@@ -11,10 +11,12 @@ describe('SelectionActions component', () => {
       allSelected: false,
       editMode: true,
       showEditModeToggle: true,
+      popupMessage: null,
       onToggleEditMode: vi.fn(),
       onToggleSelectAll: vi.fn(),
       onDelete: vi.fn(),
       onDuplicate: vi.fn(),
+      hidePopupMessage: vi.fn(),
     };
     const props = { ...defaultProps, ...propsOverride };
     return props;
