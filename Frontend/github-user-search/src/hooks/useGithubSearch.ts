@@ -11,7 +11,7 @@ export function useGithubSearch() {
 
     if (query === '') {
       setLoading(false);
-      return;
+      return [];
     }
 
     console.log(`Searching for users with query: ${query}`);
