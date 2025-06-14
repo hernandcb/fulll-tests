@@ -7,10 +7,13 @@
   padding: 10px 25px;
   color: #666;
   display: flex;
+  margin-left: 25px;
 }
 
 .actions .selected-items-count {
   margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .actions .buttons {
@@ -25,4 +28,25 @@
 
 .actions .buttons button:hover {
   cursor: pointer;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  color: #666;
+}
+
+.popup-message {
+  display: block;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  color: #1b76b8;
+  margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+  .action-button span {
+    display: none;
+  }
 }

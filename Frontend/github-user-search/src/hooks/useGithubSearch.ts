@@ -1,17 +1,22 @@
 import { useState } from 'react';
+import type { User } from '../types/User';
 import githubService from '../services/github';
 
-export function useGithubSearch() {
+export function useGithubSearch(): {
+  apiLimitExceeded: boolean;
+  loading: boolean;
+  searchUsers: (query: string) => Promise<User[]>;
+} {
   const [apiLimitExceeded, setApiLimitExceeded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const searchUsers = async (query: string) => {
+  const searchUsers = async (query: string): Promise<User[]> => {
     setApiLimitExceeded(false);
     setLoading(true);
 
     if (query === '') {
       setLoading(false);
-      return;
+      return [];
     }
 
     console.log(`Searching for users with query: ${query}`);

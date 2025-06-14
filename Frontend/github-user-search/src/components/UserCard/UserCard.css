@@ -1,15 +1,14 @@
 .user-card {
   max-width: 100px;
   width: 100px;
-  height: 160px;
   padding: 8px 2px;
   box-sizing: border-box;
   text-align: center;
-  background-color: #d5d5d5;
+  background-color: #e9e9e9;
   padding: 15px 0;
-  font-size: 12px;
+  font-size: 1em;
   border-radius: 10%;
-  border-style: outset;
+  border-style: groove;
   position: relative;
 }
 
@@ -17,6 +16,11 @@
   position: absolute;
   top: 5px;
   left: 5px;
+}
+
+.user-image {
+  height: 45px;
+  min-height: 45px;
 }
 
 .user-card .avatar {
@@ -27,6 +31,9 @@
 
 .user-card .user-id {
   font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin-top: 15px;
 }
 
@@ -39,7 +46,7 @@
 }
 
 .user-card .view-profile {
-  margin-top: 10px;
+  margin-top: 1em;
 }
 
 .user-card .view-profile .link {
@@ -48,12 +55,13 @@
 }
 
 .user-card .view-profile .button {
-  background-color: #32a3fb;
+  background-color: #65a3d3;
   border-radius: 10%;
-  padding: 5px 10px;
+  padding: 5px 5px;
+  font-size: 0.8em;
 }
 
 .user-card .view-profile .button:hover {
-  background-color: #1e7bbf;
+  background-color: #1b76b8;
   color: #fff;
 }

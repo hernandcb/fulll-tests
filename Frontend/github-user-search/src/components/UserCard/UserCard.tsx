@@ -23,11 +23,13 @@ export const UserCard = (props: Props) => {
           aria-checked={selected ? 'true' : 'false'}
         />
       )}
-      <img
-        src={user.avatar_url}
-        alt={`Avatar of ${user.login}`}
-        className="avatar"
-      />
+      <div className="user-image">
+        <img
+          src={user.avatar_url}
+          alt={`Avatar of ${user.login}`}
+          className="avatar"
+        />
+      </div>
       <div className="user-id">{user.id}</div>
       <div className="username" title={user.login}>
         {user.login}
