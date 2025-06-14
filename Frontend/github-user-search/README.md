@@ -1,54 +1,113 @@
-# React + TypeScript + Vite
+# GitHub User Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a small React-based GitHub user search application allows users to search for GitHub profiles, select multiple results, and perform basic actions like duplication and deletion.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Search GitHub users** using the GitHub API
+- **Debounced input** to reduce API calls
+- Display loading, empty, or error states (including **API rate limit exceeded**)
+- **Edit mode** to select individual or all user cards
+- Perform **bulk actions**:
+  - **Duplicate** selected users
+  - **Delete** selected users
+- **Responsive design**, suitable for small screens (min recommended size: **250x450**)
 
-## Expanding the ESLint configuration
+## Development Goals and Choices
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This project was built following the requirements of the interview task:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Use React with functional components and hooks
+- Add search input with debounce
+- Show messages for different states (loading, empty, error)
+- Display results using a card UI
+- Write unit tests using `vitest`
+- Write responsive CSS
+- Organize components cleanly for maintainability
+- Use TypeScript with basic typing to validate API responses
+
+### Additional Notes
+
+- No infinite scroll was implemented (out of scope)
+- Custom hooks (`useDebounce`, `useGithubSearch`) simplify separation of concerns
+- TypeScript used to ensure correct typing for API responses
+- Tests focus on **components and interactions**, not the hooks directly
+- **Test coverage is high** but not 100%, especially in lower-level hooks
+
+## Project Structure
+
+```
+src/
+│
+├── components/
+│ ├── UserCard/
+│ │ ├── UserCard.tsx # Displays GitHub user info in a card
+│ │ ├── UserCard.css # Styles for the user card
+│ │ └── UserCard.test.tsx # Unit tests for the user card
+│ │
+│ ├── StateMessage/
+│ │ ├── StateMessage.tsx # Shows loading, error, or empty messages
+│ │ ├── StateMessage.css # Styles for the message
+│ │ └── StateMessage.test.tsx# Tests for message display
+│ │
+│ └── SelectionActions/
+│ ├── SelectionActions.tsx # UI for select-all, delete, and duplicate actions
+│ ├── SelectionActions.css # Styles for selection actions
+│ └── SelectionActions.test.tsx# Unit tests for actions logic
+│
+├── hooks/
+│ ├── useDebounce.ts # Debounce hook for delayed input handling
+│ └── useGithubSearch.ts # Custom hook to query the GitHub users API
+│
+├── types/
+│ └── User.ts # Type definition for GitHub user objects
+│
+├── App.tsx # Main application logic and component composition
+├── App.test.tsx # Integration tests for App behavior
+└── App.css # Application styles
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> Each component lives in its own folder along with its corresponding CSS and test file. This helps keep styles, logic, and tests together for better maintainability and easier development.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## How to Run
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+
+# Install dependencies
+
+npm install
+
+# Run the development server
+
+npm run dev
+
+# Run unit tests
+
+npm run test
+
+# Check for lint errors
+
+npm run lint
+
+# Format the code
+
+npm run format
 ```
+
+## Dependencies
+
+No dependencies added beyond development and formatting tools:
+
+### Runtime
+
+- Only standard React/Vite packages
+
+### Development
+
+- **Testing**:
+  - \`vitest\`
+  - \`@testing-library/react\`
+  - \`@testing-library/user-event\`
+- **Linting/Formatting**:
+  - \`eslint\`
+  - \`prettier\`
